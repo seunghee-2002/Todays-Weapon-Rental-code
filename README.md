@@ -1,4 +1,4 @@
-# 오늘도 장비 대여 (Today's Weapon Rental)
+﻿# 오늘도 장비 대여 (Today's Weapon Rental)
 
 > 모험가에게 던전을 주선하고 무기를 대여해 수수료를 받는 **길드 경영 시뮬레이션** — Unity 2022.3 / C# · 1인 개발 · Google Play 정식 출시 (v1.0.0)
 
