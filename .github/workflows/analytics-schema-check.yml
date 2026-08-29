@@ -1,0 +1,43 @@
+name: Analytics Schema Check
+
+# UGS Event Manager 는 등록되지 않은 이벤트/파라미터를 invalid 로 조용히 버린다.
+# 코드가 보내는 것과 Tools/Analytics/events.json 이 어긋나면 지표가 소리 없이 사라지므로
+# 여기서 막는다. 자격증명이 필요 없어 PR 에서도 그대로 돈다.
+
+on:
+  push:
+    paths:
+      - 'Assets/_Projects/Scripts/**'
+      - 'Tools/Analytics/**'
+      - 'Documents/오늘도장비대여/Systems/Analytics/대시보드_등록.md'
+      - '.github/workflows/analytics-schema-check.yml'
+  pull_request:
+    paths:
+      - 'Assets/_Projects/Scripts/**'
+      - 'Tools/Analytics/**'
+      - 'Documents/오늘도장비대여/Systems/Analytics/대시보드_등록.md'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 코드 <-> events.json 대조
+        run: python Tools/Analytics/analytics.py check
+
+      # 대시보드_등록.md 의 생성 섹션이 events.json 과 어긋난 채 커밋되는 것을 막는다.
+      - name: 문서 생성 섹션 최신 여부
+        run: |
+          python Tools/Analytics/analytics.py render
+          if ! git diff --quiet; then
+            echo "::error::대시보드_등록.md 가 events.json 과 어긋납니다. 로컬에서 'python Tools/Analytics/analytics.py render' 를 실행한 결과를 반영하세요."
+            git --no-pager diff
+            exit 1
+          fi

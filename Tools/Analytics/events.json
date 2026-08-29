@@ -1,0 +1,205 @@
+{
+  "_comment": [
+    "UGS Analytics 이벤트/파라미터 스키마의 단일 원본.",
+    "코드에서 이벤트나 파라미터를 추가/변경하면 이 파일도 같은 작업에서 갱신한다.",
+    "  python analytics.py check   - C# 코드와 대조 (CI가 자동 실행)",
+    "  python analytics.py render  - Documents 의 대시보드_등록.md 생성 섹션 갱신",
+    "  python dashboard_sync.py apply - UGS Event Manager 에 실제 반영",
+    "타입은 Event Manager 가 실제로 쓰는 표기를 그대로 쓴다: INTEGER / FLOAT / STRING / BOOLEAN.",
+    "required 는 어디에도 설정하지 않는다 - 조건부 파라미터가 많아 하나라도 required 면",
+    "값이 빠지는 순간 이벤트 전체가 invalid 로 버려진다."
+  ],
+
+  "common_parameters": ["day", "game_time_min"],
+
+  "parameters": {
+    "adventurer_id":             { "type": "STRING",  "description": "모험가 정적 데이터 ID" },
+    "amount":                    { "type": "INTEGER", "description": "거래 금액(골드) 또는 유산량" },
+    "armor_type":                { "type": "STRING",  "description": "던전 방어 타입" },
+    "armor_type_match":          { "type": "BOOLEAN", "description": "무기 타입이 던전 방어 타입과 매칭되는지" },
+    "balance_after":             { "type": "INTEGER", "description": "거래 후 유산 잔액" },
+    "blacksmith_type":           { "type": "STRING",  "description": "대장장이 타입(cost_reduction/material_reduction/success_rate/disassemble_boost)" },
+    "button":                    { "type": "STRING",  "description": "버튼 식별자 (버튼_이벤트.md 의 Level 3 표)" },
+    "category":                  { "type": "STRING",  "description": "유산 업그레이드 카테고리(UpgradeCategory)" },
+    "cause":                     { "type": "STRING",  "description": "게임오버 원인(bankruptcy)" },
+    "choice":                    { "type": "STRING",  "description": "아침 이벤트 선택(accept/reject)" },
+    "complete_day":              { "type": "INTEGER", "description": "퀘스트 완료 일차" },
+    "cost":                      { "type": "INTEGER", "description": "기능 이용에 드는 골드 비용(점술가/새로고침/수색 파견). 상품 가격은 price 를 쓴다" },
+    "day":                       { "type": "INTEGER", "description": "인게임 일수" },
+    "days_to_complete":          { "type": "INTEGER", "description": "퀘스트 완료까지 걸린 일수" },
+    "delay_real_min":            { "type": "INTEGER", "description": "모험 완료 후 결과 확인까지 실경과 분 (G26)" },
+    "dialog_open_duration_sec":  { "type": "INTEGER", "description": "방문자 대화 열림부터 모험 시작까지 실시간 초 (조건부)" },
+    "direction":                 { "type": "STRING",  "description": "거래 방향(earn/spend)" },
+    "dungeon_grade":             { "type": "INTEGER", "description": "선택한 던전 등급(0~4)" },
+    "dungeon_id":                { "type": "STRING",  "description": "던전 정적 데이터 ID" },
+    "duration_min":              { "type": "INTEGER", "description": "모험 소요 시간(인게임 분)" },
+    "duration_sec":              { "type": "INTEGER", "description": "패널 체류 시간(초)" },
+    "effect_index":              { "type": "INTEGER", "description": "재부여 효과 슬롯 인덱스" },
+    "event_type":                { "type": "STRING",  "description": "아침 이벤트 유형(guild_envoy, mystery_box 등 9종)" },
+    "fail_day":                  { "type": "INTEGER", "description": "퀘스트 실패 일차" },
+    "filter_index":              { "type": "INTEGER", "description": "필터 토글 인덱스" },
+    "fine":                      { "type": "INTEGER", "description": "퀘스트 벌금(골드)" },
+    "game_time_min":             { "type": "INTEGER", "description": "인게임 시각(분, 0~1439)" },
+    "gold":                      { "type": "INTEGER", "description": "현재 보유 골드" },
+    "grade_after":               { "type": "INTEGER", "description": "진화 후 무기 등급" },
+    "grade_before":              { "type": "INTEGER", "description": "진화 전 무기 등급" },
+    "insight":                   { "type": "INTEGER", "description": "현재 통찰 보유량" },
+    "is_first_time":             { "type": "BOOLEAN", "description": "해당 패널/버튼을 처음 사용했는지 (G3)" },
+    "is_locked":                 { "type": "BOOLEAN", "description": "재부여 효과 잠금 여부" },
+    "is_named":                  { "type": "BOOLEAN", "description": "네임드 모험가 여부" },
+    "is_named_adventurer":       { "type": "BOOLEAN", "description": "네임드 모험가의 모험인지" },
+    "is_new_game":               { "type": "BOOLEAN", "description": "새 게임 여부(false=이어하기)" },
+    "is_on":                     { "type": "BOOLEAN", "description": "토글 켜짐 여부(대여중 표시, 유산 결제)" },
+    "issue_day":                 { "type": "INTEGER", "description": "퀘스트 발행 일차" },
+    "item_id":                   { "type": "STRING",  "description": "액티브 아이템 정적 데이터 ID" },
+    "legacy_cost":               { "type": "INTEGER", "description": "통찰 유산 결제 비용(유산 포인트. 골드인 cost 와 통화가 다르다)" },
+    "level_after":               { "type": "INTEGER", "description": "강화 후 강화 레벨" },
+    "level_before":              { "type": "INTEGER", "description": "강화 전 강화 레벨" },
+    "locked_count":              { "type": "INTEGER", "description": "재련 시 잠근 효과 개수" },
+    "log_type":                  { "type": "STRING",  "description": "에러 로그 종류(Error/Exception/Assert)" },
+    "material_id":               { "type": "STRING",  "description": "재료 정적 데이터 ID" },
+    "message":                   { "type": "STRING",  "description": "에러 메시지 앞 200자" },
+    "outcome":                   { "type": "STRING",  "description": "모험 결과(great_success/success/failure/death/retreat)" },
+    "panel":                     { "type": "STRING",  "description": "패널 식별자 (이벤트_스펙.md 의 Level 2 표)" },
+    "phase":                     { "type": "STRING",  "description": "시간대(morning/daytime/evening/night)" },
+    "price":                     { "type": "INTEGER", "description": "구매 가격(골드)" },
+    "purchase_order":            { "type": "INTEGER", "description": "유산 업그레이드 누적 구매 순번(1=생애 첫 구매)" },
+    "quantity":                  { "type": "INTEGER", "description": "일괄 처리 개수(일괄 분해 무기 수, 수색 파견 던전 수)" },
+    "quest_id":                  { "type": "STRING",  "description": "주간 퀘스트 정적 데이터 ID" },
+    "recipe_id":                 { "type": "STRING",  "description": "제작 레시피 ID" },
+    "reputation":                { "type": "INTEGER", "description": "현재 평판 수치" },
+    "reputation_level":          { "type": "STRING",  "description": "평판 레벨(Bronze/Silver/Gold/Platinum/Diamond)" },
+    "result_type":               { "type": "STRING",  "description": "제작 결과물 종류(weapon/item)" },
+    "revealed_stat_count":       { "type": "INTEGER", "description": "공개된 모험가 스탯 수(0~4)" },
+    "reward_type":               { "type": "STRING",  "description": "퀘스트 보상 구성(gold+reputation+insight 조합)" },
+    "seer_used":                 { "type": "BOOLEAN", "description": "모험 출발 전 점술가 상담 여부" },
+    "source":                    { "type": "STRING",  "description": "거래 출처/사용처 (이벤트_스펙.md 의 source 값 목록)" },
+    "speed_multiplier":          { "type": "FLOAT",   "description": "변경된 게임 배속 값" },
+    "stack_head":                { "type": "STRING",  "description": "스택 트레이스 앞 300자" },
+    "stat":                      { "type": "STRING",  "description": "통찰 테스트 대상 스탯(STR/DEX/INT/LUK)" },
+    "step":                      { "type": "INTEGER", "description": "튜토리얼 단계 번호(1~12)" },
+    "step_name":                 { "type": "STRING",  "description": "튜토리얼 단계 이름(TutorialStep enum)" },
+    "success":                   { "type": "BOOLEAN", "description": "실행 성공 여부(강화 등)" },
+    "total_playtime_sec":        { "type": "INTEGER", "description": "이번 회차 누적 실플레이 시간(초)" },
+    "trait_revealed":            { "type": "BOOLEAN", "description": "모험가 특성 공개 여부" },
+    "upgrade_key":               { "type": "STRING",  "description": "유산 업그레이드 키(UpgradeKey enum)" },
+    "weapon_grade":              { "type": "INTEGER", "description": "무기 등급(0=Common~4=Legendary). 모험/대장장이/상점/인벤토리 전 영역 공용" },
+    "weapon_id":                 { "type": "STRING",  "description": "무기 정적 데이터 ID" },
+    "weapon_is_player_selected": { "type": "BOOLEAN", "description": "플레이어가 직접 골라 대여한 무기 여부(false=기본 무기)" }
+  },
+
+  "events": {
+    "adventure_completed": {
+      "description": "모험 완료(결과 확정 시점, 결과창 확인과 무관)",
+      "parameters": ["dungeon_id", "weapon_id", "weapon_grade", "outcome", "duration_min", "seer_used", "weapon_is_player_selected", "is_named_adventurer", "revealed_stat_count", "trait_revealed", "armor_type_match"]
+    },
+    "adventure_started": {
+      "description": "모험 출발 확정",
+      "parameters": ["dungeon_id", "weapon_id", "weapon_grade", "adventurer_id", "seer_used", "revealed_stat_count", "trait_revealed", "weapon_is_player_selected", "armor_type_match", "is_named_adventurer", "dialog_open_duration_sec"]
+    },
+    "blacksmith_craft_done": {
+      "description": "제작 완료(무기/아이템)",
+      "parameters": ["recipe_id", "result_type"]
+    },
+    "blacksmith_disassemble_done": {
+      "description": "무기 분해 완료(일괄분해는 무기당 1건)",
+      "parameters": ["weapon_id", "weapon_grade"]
+    },
+    "blacksmith_enforce_done": {
+      "description": "무기 강화 실행 완료(성공/실패 모두 기록)",
+      "parameters": ["weapon_id", "weapon_grade", "level_before", "level_after", "success"]
+    },
+    "blacksmith_evolve_done": {
+      "description": "무기 진화 성공(실패는 기록 안 함)",
+      "parameters": ["weapon_id", "grade_before", "grade_after"]
+    },
+    "blacksmith_reroll_done": {
+      "description": "무기 재련 실행 완료(추가 재련 포함)",
+      "parameters": ["weapon_id", "locked_count"]
+    },
+    "btn_clicked": {
+      "description": "버튼 클릭 (Level 3, 116개 지점). 버튼마다 붙는 파라미터가 달라 required 절대 금지",
+      "parameters": ["panel", "button", "is_first_time", "weapon_id", "weapon_grade", "material_id", "item_id", "recipe_id", "dungeon_id", "upgrade_key", "category", "stat", "event_type", "price", "cost", "legacy_cost", "quantity", "locked_count", "effect_index", "filter_index", "is_on", "is_locked"]
+    },
+    "client_error": {
+      "description": "빌드에서 발생한 Error/Exception/Assert 리포트 (LogPolicy, 세션당 최대 20건/중복 1회)",
+      "parameters": ["log_type", "message", "stack_head"]
+    },
+    "day_begin": {
+      "description": "하루 시작 시점의 자원 스냅샷(새 게임 1일차 + 매일 아침)",
+      "parameters": ["gold", "reputation", "reputation_level", "insight"]
+    },
+    "game_over": {
+      "description": "회차 종료(폐업) 시 최종 상태",
+      "parameters": ["gold", "reputation", "reputation_level", "cause", "total_playtime_sec"]
+    },
+    "game_start": {
+      "description": "인게임 진입 시 1회(새 게임/이어하기 구분)",
+      "parameters": ["is_new_game"]
+    },
+    "gold_transaction": {
+      "description": "골드 획득/지출(거래 건당 1건)",
+      "parameters": ["amount", "direction", "source"]
+    },
+    "legacy_transaction": {
+      "description": "유산 획득/지출(거래 건당 1건)",
+      "parameters": ["amount", "direction", "source", "balance_after"]
+    },
+    "legacy_upgraded": {
+      "description": "유산 업그레이드 구매",
+      "parameters": ["upgrade_key", "purchase_order"]
+    },
+    "morning_event_resolved": {
+      "description": "아침 이벤트 수락/거절 확정",
+      "parameters": ["event_type", "choice"]
+    },
+    "morning_event_shown": {
+      "description": "아침 이벤트 NPC 등장",
+      "parameters": ["event_type"]
+    },
+    "panel_closed": {
+      "description": "패널 닫힘 (닫기 버튼 / ESC·오버레이 / 전체 닫기 / 씬 전환 4경로)",
+      "parameters": ["panel", "duration_sec"]
+    },
+    "panel_opened": {
+      "description": "패널/탭 진입",
+      "parameters": ["panel", "is_first_time", "blacksmith_type", "delay_real_min"]
+    },
+    "phase_changed": {
+      "description": "시간대 전환(아침/낮/저녁/밤)",
+      "parameters": ["phase"]
+    },
+    "quest_board_confirmed": {
+      "description": "의뢰판 던전 확정(선택한 던전당 1건)",
+      "parameters": ["dungeon_id", "dungeon_grade"]
+    },
+    "quest_completed": {
+      "description": "주간 퀘스트 완료",
+      "parameters": ["quest_id", "issue_day", "complete_day", "days_to_complete", "reward_type"]
+    },
+    "quest_failed": {
+      "description": "주간 퀘스트 실패(마감일 미달성)",
+      "parameters": ["quest_id", "issue_day", "fail_day", "fine"]
+    },
+    "scout_sent": {
+      "description": "수색꾼 파견",
+      "parameters": ["dungeon_id", "armor_type"]
+    },
+    "speed_changed": {
+      "description": "게임 배속 변경",
+      "parameters": ["speed_multiplier"]
+    },
+    "tutorial_step": {
+      "description": "튜토리얼 단계 진입(1일차 12단계)",
+      "parameters": ["step", "step_name"]
+    },
+    "visitor_spawned": {
+      "description": "모험가 방문자 스폰",
+      "parameters": ["adventurer_id", "is_named"]
+    },
+    "weapon_purchased": {
+      "description": "무기 상점 구매 완료",
+      "parameters": ["weapon_id", "weapon_grade", "price"]
+    }
+  }
+}

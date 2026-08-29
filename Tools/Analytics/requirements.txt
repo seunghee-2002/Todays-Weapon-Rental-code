@@ -1,0 +1,3 @@
+# dashboard_sync.py 전용. analytics.py 는 표준 라이브러리만 쓰므로 설치가 필요 없다.
+# 설치 후 브라우저도 한 번 받아야 한다:  playwright install chromium
+playwright>=1.44

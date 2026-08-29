@@ -1,0 +1,69 @@
+name: UGS Cloud Code Deploy
+
+# Tools/CloudCode/*.js 가 UGS Cloud Code Scripts 의 단일 원본이다.
+# main 에 들어오면 프로덕션 환경에 즉시 반영된다.
+# PR/그 외에서는 차이만 로그로 남기고 배포하지 않는다.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Tools/CloudCode/**'
+      - '.github/workflows/ugs-cloudcode-deploy.yml'
+  pull_request:
+    paths:
+      - 'Tools/CloudCode/**'
+      - 'Assets/_Projects/Data/Config/NicknameConfig.asset'
+  workflow_dispatch:
+
+# 동시에 두 배포가 겹쳐 서로의 publish 를 덮지 않도록 직렬화한다.
+concurrency:
+  group: ugs-cloudcode-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # windows 러너를 쓰는 이유: sync_profanity.ps1 이 경로를 'Assets\_Projects\...' 형태로
+    # 조립해서 Linux 의 pwsh 에서는 파일을 찾지 못한다. 스크립트는 로컬에서 쓰는 그대로 둔다.
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    env:
+      UNITY_PROJECT_ID: ${{ secrets.UNITY_PROJECT_ID }}
+      UNITY_ENV_NAME: ${{ secrets.UNITY_ENV_NAME }}
+      UGS_SERVICE_KEY_ID: ${{ secrets.UGS_SERVICE_KEY_ID }}
+      UGS_SERVICE_SECRET_KEY: ${{ secrets.UGS_SERVICE_SECRET_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # 클라이언트(NicknameConfig.asset)와 서버(changeNickname.js)의 닉네임 규칙이
+      # 어긋난 채로 배포되면 클라가 통과시킨 닉네임을 서버가 거부한다.
+      - name: 닉네임 규칙 동기화 확인
+        shell: pwsh
+        run: ./Tools/CloudCode/sync_profanity.ps1 -Check
+
+      # diff 는 차이가 있으면 1 로 끝난다. 그건 실패가 아니라 '배포할 게 있다'는 뜻이므로
+      # 2 이상(진짜 오류)일 때만 잡을 멈춘다.
+      - name: 원격과의 차이 확인
+        run: |
+          set +e
+          python Tools/CloudCode/deploy.py diff
+          code=$?
+          set -e
+          if [ "$code" -gt 1 ]; then exit "$code"; fi
+
+      - name: UGS 에 배포
+        if: github.event_name != 'pull_request'
+        run: python Tools/CloudCode/deploy.py push --yes
+
+      - name: 배포 후 재확인
+        if: github.event_name != 'pull_request'
+        run: python Tools/CloudCode/deploy.py diff

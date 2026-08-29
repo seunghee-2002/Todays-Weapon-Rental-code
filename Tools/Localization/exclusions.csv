@@ -1,0 +1,8 @@
+﻿Key,Reason
+RatingNoticeView.prefab|*,Korean game-rating legal notice - excluded by decision (see progress doc section 5)
+name.prefab|*,Layer Lab demo asset - not part of the game
+DebugBtn.prefab|*,Developer-only debug UI - excluded by user decision
+DebugMenuView.prefab|*,Developer-only debug UI - excluded by user decision
+TutorialDebugBar.prefab|*,Developer-only debug UI - excluded by user decision
+ScoutProgressItem.prefab|*,Orphaned prefab - its MonoBehaviour script guid 41c187796f1251f40864ce0b7ac773d9 does not exist in Assets and nothing references the prefab
+DialogueChoiceButton.prefab|*,Code-driven via SpineDialogueView.CreateChoiceButton -> GetComponentInChildren<TextMeshProUGUI>().text (no serialized field to detect)

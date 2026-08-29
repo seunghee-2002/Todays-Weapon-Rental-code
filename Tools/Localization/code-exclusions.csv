@@ -1,0 +1,23 @@
+﻿Key,Reason
+DebugMenuView.cs|*,Developer-only debug UI - excluded by user decision
+TutorialDebugBar.cs|*,Developer-only debug UI - excluded by user decision
+LocalizationManager.cs|한국어,Language names stay in their own language by design (see 다국어_도입전략 section 6)
+VisitorManager.Instance.cs|네임드,Log-only category label (assigned to a local then interpolated into Log.Info)
+VisitorManager.Instance.cs|일반,Log-only category label (assigned to a local then interpolated into Log.Info)
+VisitorManager.cs|낮 시간이 아닙니다. 9:00~18:00에 스폰 가능합니다.,Debug & Test region - only reachable from DebugMenuView
+VisitorManager.cs|살아있는 네임드 모험가가 없습니다.,Debug & Test region - only reachable from DebugMenuView
+VisitorManager.cs|{alive.Name} 사망 처리,Debug & Test region - only reachable from DebugMenuView
+VisitorManager.cs|죽은 네임드 모험가가 없습니다. 먼저 죽이세요.,Debug & Test region - only reachable from DebugMenuView
+AdventureManager.Calculations.cs|사망,Log-only outcome label in debug result builder
+AdventureManager.Calculations.cs|성공,Log-only outcome label in debug result builder
+AdventureManager.Calculations.cs|실패,Log-only outcome label in debug result builder
+MorningEventManager.cs|먹튀,Internal investor result key - selects a dialogue id and goes to Log.Info only
+MorningEventManager.cs|성공,Internal investor result key - selects a dialogue id and goes to Log.Info only
+MorningEventManager.cs|대성공,Internal investor result key - selects a dialogue id and goes to Log.Info only
+MorningEventManager.cs|대박,Internal investor result key - selects a dialogue id and goes to Log.Info only
+MorningEventManager.cs|일반 상자(무기 대체),Gold reason id passed to FallbackWeaponToGold -> AddGold
+MorningEventManager.cs|희귀 상자(무기 대체),Gold reason id passed to FallbackWeaponToGold -> AddGold
+MorningEventManager.cs|신비 상자(무기 대체),Gold reason id passed to FallbackWeaponToGold -> AddGold
+UITranslator.cs|을(를),Korean-only grammatical particle - ObjectParticle returns empty string on non-ko locales
+UITranslator.cs|을,Korean-only grammatical particle - ObjectParticle returns empty string on non-ko locales
+UITranslator.cs|를,Korean-only grammatical particle - ObjectParticle returns empty string on non-ko locales
