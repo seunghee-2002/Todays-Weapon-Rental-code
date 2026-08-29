@@ -1,0 +1,605 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>오늘도 장비 대여 — 게임 프로그래밍 포트폴리오</title>
+<style>
+  @page { size: A4; margin: 11mm 12mm 12mm 12mm; }
+  * { box-sizing: border-box; }
+  html { font-size: 9.6pt; }
+  body { margin: 0; font-family: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; color: #1e232b; line-height: 1.45; }
+  h1, h2, h3, h4 { margin: 0; line-height: 1.25; letter-spacing: -0.01em; }
+  h2 { font-size: 16pt; color: #0f3d5e; border-bottom: 2px solid #0f3d5e; padding-bottom: 3px; margin: 0 0 9px; }
+  h2 .num { display: inline-block; font-size: 9.5pt; color: #fff; background: #0f3d5e; border-radius: 3px; padding: 1px 7px; vertical-align: middle; margin-right: 8px; }
+  h3 { font-size: 11.8pt; color: #163a55; margin: 10px 0 4px; }
+  h4 { font-size: 10.3pt; color: #2b4a63; margin: 8px 0 3px; }
+  p { margin: 0 0 6px; }
+  ul, ol { margin: 0 0 6px; padding-left: 18px; }
+  li { margin-bottom: 1.5px; }
+  code { font-family: "Cascadia Code", Consolas, "D2Coding", monospace; font-size: 8.4pt; background: #eef2f6; padding: 0 3px; border-radius: 2px; }
+  pre { font-family: "Cascadia Code", Consolas, "D2Coding", monospace; font-size: 7.9pt; line-height: 1.35; background: #f4f6f9; border: 1px solid #d9dfe6; border-left: 3px solid #0f3d5e; padding: 6px 8px; margin: 5px 0 8px; white-space: pre-wrap; word-break: break-all; }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  table { border-collapse: collapse; width: 100%; margin: 5px 0 8px; font-size: 8.7pt; }
+  th, td { border: 1px solid #cfd6de; padding: 3px 5px; vertical-align: top; text-align: left; }
+  th { background: #e8eef4; font-weight: 700; color: #163a55; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .page { page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+  .avoid { page-break-inside: avoid; }
+  .small { font-size: 8.3pt; color: #4a5561; }
+  .muted { color: #5b6773; }
+  .tag { display: inline-block; font-size: 8.3pt; background: #e8eef4; color: #163a55; border-radius: 3px; padding: 0 6px; margin: 0 2px 2px 0; white-space: nowrap; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .shot { text-align: center; }
+  .shot img { width: 100%; border: 1px solid #cfd6de; border-radius: 4px; }
+  .shot .cap { font-size: 8.5pt; color: #4a5561; margin-top: 3px; }
+  .callout { border: 1px solid #d9dfe6; border-left: 4px solid #c8831a; background: #fdf8ef; padding: 7px 10px; margin: 8px 0 10px; font-size: 9.6pt; }
+  .callout.blue { border-left-color: #0f3d5e; background: #f1f5f9; }
+  .box { border: 1px solid #d9dfe6; border-radius: 4px; padding: 8px 10px; margin: 6px 0; }
+  .kv { display: grid; grid-template-columns: 110px 1fr; gap: 3px 10px; font-size: 9.8pt; }
+  .kv dt { font-weight: 700; color: #163a55; } .kv dd { margin: 0; }
+  a { color: #0b5aa8; text-decoration: none; }
+  .link { font-size: 8.6pt; color: #0b5aa8; word-break: break-all; }
+  .psr { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 6px 0 10px; }
+  .psr > div { border: 1px solid #d9dfe6; border-radius: 4px; padding: 6px 9px; font-size: 9.4pt; }
+  .psr b { display: block; color: #0f3d5e; font-size: 9pt; margin-bottom: 3px; letter-spacing: .04em; }
+  .hero { display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px; align-items: start; }
+  .title-block h1 { font-size: 25pt; color: #0f3d5e; }
+  .title-block .sub { font-size: 12.5pt; color: #2b4a63; margin: 4px 0 10px; }
+  .stat { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0; }
+  .stat > div { border: 1px solid #cfd6de; border-radius: 4px; padding: 7px 8px; text-align: center; }
+  .stat .v { font-size: 16pt; font-weight: 700; color: #0f3d5e; line-height: 1.1; }
+  .stat .l { font-size: 8.4pt; color: #4a5561; margin-top: 2px; }
+  svg text { font-family: "Malgun Gothic", "맑은 고딕", sans-serif; }
+  .footer { position: running(footer); }
+  .toc td { border: none; padding: 2px 6px; }
+</style>
+</head>
+<body>
+
+<!-- ===================== 1. 표지 + 요약 ===================== -->
+<section class="page">
+  <div class="hero">
+    <div class="title-block">
+      <div class="small" style="letter-spacing:.08em">게임 프로그래밍 포트폴리오</div>
+      <h1>오늘도 장비 대여</h1>
+      <div class="sub">Today's Weapon Rental — 길드 경영 시뮬레이션 · Unity / C# · 1인 개발 · Google Play 정식 출시</div>
+      <p>모험가에게 던전을 주선하고 무기를 대여해 수수료를 받는 경영 게임입니다. 하루가 아침·낮·저녁·밤으로 흐르고, 플레이어는 정보(점술·수색·대화)를 사서 성공률을 올리며 주간 의뢰와 벌금 압박 속에서 길드를 키웁니다. 기획·프로그래밍·서버·운영 툴·출시까지 전 과정을 혼자 진행했습니다.</p>
+      <dl class="kv">
+        <dt>이름 / 연락처</dt><dd>[이름] · dldudcjs12345@gmail.com</dd>
+        <dt>기간</dt><dd>2026.03 ~ 2026.08 (5개월, 커밋 1,374개)</dd>
+        <dt>역할 · 기여도</dt><dd>1인 개발 — 기획 · 클라이언트 · 서버(Cloud Code) · 운영 툴 · 밸런싱 · 출시 (100%)</dd>
+        <dt>플랫폼</dt><dd>Android — Google Play 정식 출시 v1.0.0 (2026-08-17), 알파 3회 선행</dd>
+        <dt>스토어</dt><dd><a href="https://play.google.com/store/apps/details?id=com.IdeaBank.TodaysWeaponRental">play.google.com/store/apps/details?id=com.IdeaBank.TodaysWeaponRental</a></dd>
+        <dt>GitHub</dt><dd><a href="https://github.com/seunghee-2002/Todays-Weapon-Rental">github.com/seunghee-2002/Todays-Weapon-Rental</a> <span class="small">(자체 작성 코드·문서만 담은 열람용 저장소)</span></dd>
+        <dt>소개 페이지</dt><dd><a href="https://seunghee-2002.github.io/todays-weapon-rental/">seunghee-2002.github.io/todays-weapon-rental</a></dd>
+      </dl>
+    </div>
+    <div class="grid2">
+      <div class="shot"><img src="../Docs/images/store_2.jpg"></div>
+      <div class="shot"><img src="../Docs/images/store_6.jpg"></div>
+    </div>
+  </div>
+
+  <div class="stat">
+    <div><div class="v">75,415</div><div class="l">자체 C# 라인 (307 파일, 에셋 코드 제외)</div></div>
+    <div><div class="v">36 / 56 / 25</div><div class="l">Manager / View / Controller 클래스</div></div>
+    <div><div class="v">35건</div><div class="l">시뮬레이션 실측 근거를 첨부한 밸런스 변경 기록</div></div>
+    <div><div class="v">4개 언어</div><div class="l">ko · en · ja · zh-Hans, String Table 2,110키</div></div>
+  </div>
+
+  <h3>핵심 성과 요약</h3>
+  <ul>
+    <li><b>헤드리스 밸런스 시뮬레이터</b>를 만들어 밸런싱을 "감"에서 "실측"으로 바꿨습니다 — Unity batchmode로 100시드 × 100주 × 3페르소나를 돌리고, 모든 가격을 "모험 1회 수입(R)의 배수"로 읽는 기준 체계를 세웠습니다. 밸런스 변경 35건이 전부 before/after 수치를 갖습니다. (§3)</li>
+    <li><b>서버 검증 기반 라이브옵스</b> — Unity Cloud Code 함수 11개로 리더보드 점수(4단계 검증·재사용 차단·TOCTOU 처리), 닉네임, 밴, 기기 이전 코드를 서버에서 판정하고, 세이브 동기화는 서버 시각 스탬프로 충돌을 해소합니다. FastAPI 어드민 사이트와 GitHub Actions 자동 배포까지 포함합니다. (§4)</li>
+    <li><b>기획 데이터·다국어 파이프라인</b> — SO↔CSV diff/검증 툴로 "무음 데이터 파손"을 막고, 폰트 폴백 체인과 실측 기반 아틀라스 판단으로 프리팹 1,109참조를 수정 없이 4개 언어로 전환했습니다. (§5)</li>
+    <li><b>출시와 운영</b> — 알파 0.0.1→0.0.3→정식 1.0.0. 플레이테스트 지적 4건을 시스템 확장으로 대응했고, 애널리틱스 이벤트 28종을 CI가 코드와 대조합니다. (§7)</li>
+  </ul>
+
+  <h3>기술 스택</h3>
+  <table>
+    <tr><th style="width:110px">엔진 · 언어</th><td>Unity 2022.3 LTS · C# · uGUI · TextMeshPro · Addressables · Spine 런타임(외형 애니메이션) · ScriptableObject 데이터</td></tr>
+    <tr><th>온라인</th><td>Unity Gaming Services — Authentication(익명) · Cloud Save(Default/Protected) · Cloud Code(JS 11개) · Leaderboards · Analytics</td></tr>
+    <tr><th>다국어</th><td>Unity Localization 1.5 — String Table 7컬렉션 · 로케일별 폰트 폴백 · PowerShell 감사 스크립트</td></tr>
+    <tr><th>툴 · 운영</th><td>Python 3 (FastAPI · httpx · pytest · Playwright) · Google OAuth · Docker · GitHub Actions · PowerShell · Unity Editor 확장 15종</td></tr>
+  </table>
+
+  <table class="toc small">
+    <tr><td>§1 게임 개요</td><td>§2 아키텍처와 저장 계층</td><td>§3 밸런스 시뮬레이터 ★</td><td>§4 UGS 라이브옵스 ★</td></tr>
+    <tr><td>§5 데이터·다국어 파이프라인</td><td>§6 에디터 툴과 CI</td><td>§7 출시와 운영</td><td>§8 한계와 회고</td></tr>
+  </table>
+</section>
+
+<!-- ===================== §1 게임 개요 ===================== -->
+<section class="page">
+  <h2><span class="num">§1</span>게임 개요</h2>
+  <div class="grid2">
+    <div>
+      <h3 style="margin-top:0">코어 루프 — 하루 = 정보를 사서 위험을 줄이는 경영</h3>
+      <table>
+        <tr><th style="width:90px">시간대</th><th>플레이어가 하는 일</th></tr>
+        <tr><td>아침 06–09</td><td>이벤트 NPC(대장장이·무기상·수수께끼 상자 등) 응대, 09:00 의뢰판 갱신</td></tr>
+        <tr><td>낮 09–18</td><td>방문한 모험가에게 던전 배정 + 무기 대여. 점술·수색·대화로 숨은 스탯/특성을 공개하고 성공률을 올림</td></tr>
+        <tr><td>저녁 18–21</td><td>전령 보고 — 모험 결과 정산(수수료 7% + 대여료 10% ± 특성), 재료 회수</td></tr>
+        <tr><td>밤 21:00</td><td>자동 일시정지 → 다음 날. 주말엔 주간 의뢰 판정, 미달 시 벌금</td></tr>
+      </table>
+      <p>실시간 1초 = 게임 3분, 배속 조절 가능. 게임오버(파산)되면 회차가 끝나고 <b>유산(영구 업그레이드)</b>이 남아 다음 회차가 조금 쉬워지는 로그라이트 구조입니다. 40주 캠페인 이후는 난이도 등급이 붙은 엔드리스 의뢰가 이어집니다.</p>
+      <h3>1.0 콘텐츠 규모</h3>
+      <ul>
+        <li>무기 178종 · 던전 28종 · 재료 96종 · 액티브 아이템 30종 · 주간 의뢰 56종 · 던전 이벤트 97종</li>
+        <li>모험가 페르소나 20종 + 네임드 8명, 특성 16종, 아침 이벤트 NPC 9종</li>
+        <li>유산 업그레이드 20종, 대장간(강화·진화·재부여·분해·제작)</li>
+        <li>리더보드(일수 기준), 닉네임, 기기 이전, 계정 초기화, 강제 업데이트</li>
+      </ul>
+    </div>
+    <div class="grid2">
+      <div class="shot"><img src="../Docs/images/store_3.jpg"><div class="cap">매일 바뀌는 던전 3개 선택</div></div>
+      <div class="shot"><img src="../Docs/images/store_4.jpg"><div class="cap">모험가 방문 — 정보 공개 후 배정</div></div>
+      <div class="shot"><img src="../Docs/images/store_7.jpg"><div class="cap">정산 — 수수료 구조가 그대로 보임</div></div>
+      <div class="shot"><img src="../Docs/images/store_8.jpg"><div class="cap">대장간 강화 — 부가효과 5종</div></div>
+    </div>
+  </div>
+  <div class="callout blue avoid">
+    <b>설계의 중심 질문</b> — "정보를 사는 비용이 성공률 상승으로 회수되는가?" 이 게임의 모든 골드는 모험 성공에서 나오므로, 점술·수색·대화·무기 가격을 전부 <b>모험 1회 순수입(R)</b> 단위로 정의했습니다(§3-3). 상급 플레이어는 정보를 써서 R 자체가 커지고(약 1,100G), 초급은 정보를 안 써서 R이 작습니다(약 600G) — 실력 격차가 가격이 아니라 R에 녹아 있게 만든 것이 밸런스 설계의 핵심입니다.
+  </div>
+</section>
+
+<!-- ===================== §2 아키텍처 ===================== -->
+<section class="page">
+  <h2><span class="num">§2</span>아키텍처와 저장 계층</h2>
+  <div class="grid2">
+    <div>
+      <h3 style="margin-top:0">4계층 구조 — "Manager는 View를 모른다"</h3>
+      <svg viewBox="0 0 400 250" width="88%" style="display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#0f3d5e"/></marker>
+        <marker id="arx" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#b23a3a"/></marker></defs>
+        <rect x="10" y="10" width="170" height="52" rx="5" fill="#e8eef4" stroke="#0f3d5e"/>
+        <text x="95" y="30" text-anchor="middle" font-size="12" font-weight="700" fill="#0f3d5e">View (56)</text>
+        <text x="95" y="48" text-anchor="middle" font-size="9.5" fill="#2b4a63">BaseView — 표시만 · 이벤트 구독</text>
+        <rect x="220" y="10" width="170" height="52" rx="5" fill="#e8eef4" stroke="#0f3d5e"/>
+        <text x="305" y="30" text-anchor="middle" font-size="12" font-weight="700" fill="#0f3d5e">Controller (25)</text>
+        <text x="305" y="48" text-anchor="middle" font-size="9.5" fill="#2b4a63">BaseController&lt;TView&gt; — 자동 등록</text>
+        <rect x="115" y="110" width="170" height="52" rx="5" fill="#fdf8ef" stroke="#c8831a"/>
+        <text x="200" y="130" text-anchor="middle" font-size="12" font-weight="700" fill="#7a4e0a">Manager (36)</text>
+        <text x="200" y="148" text-anchor="middle" font-size="9.5" fill="#7a4e0a">BaseManager&lt;T&gt; 싱글턴 · C# event</text>
+        <rect x="10" y="200" width="380" height="42" rx="5" fill="#f4f6f9" stroke="#8a97a5"/>
+        <text x="200" y="217" text-anchor="middle" font-size="11" font-weight="700" fill="#2b4a63">Data — ScriptableObject(정적) · RuntimeInstance · SaveData</text>
+        <text x="200" y="233" text-anchor="middle" font-size="9" fill="#4a5561">Config SO 21개(밸런스 수치) · StaticData 14타입 · GameData / PlayerData</text>
+        <line x1="180" y1="36" x2="220" y2="36" stroke="#0f3d5e" stroke-width="1.5" marker-end="url(#ar)"/>
+        <line x1="305" y1="62" x2="240" y2="110" stroke="#0f3d5e" stroke-width="1.5" marker-end="url(#ar)"/>
+        <line x1="95" y1="62" x2="95" y2="200" stroke="#0f3d5e" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+        <text x="60" y="135" font-size="8.5" fill="#2b4a63">DataManager 읽기만</text>
+        <line x1="200" y1="162" x2="200" y2="200" stroke="#0f3d5e" stroke-width="1.5" marker-end="url(#ar)"/>
+        <line x1="160" y1="110" x2="120" y2="66" stroke="#b23a3a" stroke-width="1.5" marker-end="url(#arx)"/>
+        <text x="152" y="82" font-size="9" fill="#b23a3a" font-weight="700">✕ 금지</text>
+      </svg>
+      <table>
+        <tr><th>호출</th><th>규칙</th></tr>
+        <tr><td>View → Controller</td><td>도메인 매니저는 반드시 Controller 경유</td></tr>
+        <tr><td>View → DataManager</td><td>정적 SO 카탈로그, 읽기 전용만 허용</td></tr>
+        <tr><td>View → AnalyticsManager</td><td>관측 전용(상태 미변경)이라 직통 허용 — 컨트롤러 없는 View의 <code>btn_clicked</code></td></tr>
+        <tr><td>Manager → View/Controller</td><td><b>절대 금지.</b> Manager는 <code>event Action&lt;&gt;</code>만 노출</td></tr>
+      </table>
+      <p class="small">거대 매니저는 기능별 partial로 분할 — <code>AdventureManager</code> 7파일 3,127줄(Calculations · EventProcessor · Sequence · HeraldReport · Mood), <code>VisitorManager</code> 5파일, <code>Insight</code> 5파일.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:0">데이터 접근 원칙 — "ID로 굽고, 참조로 복원"</h3>
+      <p>RuntimeInstance는 정적 SO를 <b>참조로 직접</b> 들고, <b>저장 시에만</b> ID 문자열로 굽습니다. RuntimeInstance는 <code>DataManager</code>를 모르며, 복원은 각 도메인 매니저의 <code>Initialize(GameData)</code>가 맡습니다.</p>
+<pre><code>// 굽기 — Utils/SaveDataConverter.cs
+weaponDataID  = instance.weaponData.StaticID,          // SO 참조 → ID
+dungeonDataID = instance.dungeon?.StaticID ?? "unknown",
+rentedWeaponInstanceID = instance.rentedWeapon?.instanceID,
+
+// 복원 — Systems/InventoryManager.cs:32 LoadFromGameData
+var weaponData = DataManager.Instance.GetWeapon(saveData.weaponDataID);
+if (weaponData == null) continue;                      // 폐기된 ID는 스킵
+var effects = ReifyEffectsFromSave(saveData.effects);
+ownedWeapons.Add(new WeaponInstance(weaponData, effects, saveData));</code></pre>
+      <p class="small"><code>DataManager</code>의 판정 기준: "이 메서드가 <b>게임 규칙</b>을 아는가(→ 도메인 매니저), <b>필드 값</b>만 보는가(→ DataManager)". 예: <code>GetEnforceMaterialByGrade</code>는 규칙이라 <code>BlacksmithManager</code>로.</p>
+
+      <h3>초기화 순서의 단일 진입점</h3>
+      <p><code>GameManager</code>(<code>[DefaultExecutionOrder(-100)]</code>)의 <code>InitializeManagers()</code>가 21개 매니저를 의존 순서로 초기화합니다: Inventory → … → Visitor → Adventure(모험가·무기가 먼저 있어야 진행 중 모험 복원) → … → Tutorial(맨 끝).</p>
+
+      <h3>저장 계층 규약 3가지</h3>
+      <p class="small">문서 원문: "데이터 손실 버그가 반복적으로 나왔던 지점이라 공통 장치로 고정해 두었다."</p>
+      <table>
+        <tr><th style="width:92px">규약</th><th>구현</th></tr>
+        <tr><td>원자적 쓰기</td><td><code>SaveManager.WriteAllTextAtomic</code> — <code>.tmp</code>에 쓰고 <code>File.Replace</code>, 직전본은 <code>.bak</code>. 로드 시 본 파일 손상 → <code>.bak</code> 복구, 손상본은 <code>.corrupt-타임스탬프</code>로 보존</td></tr>
+        <tr><td>확정 직후 저장</td><td><code>SaveAfterCommittedAction(reason)</code> — 강화·상자·모험 출발 등 도박성 결과 확정 직후 저장해 <b>강제 종료 세이브스컴 차단</b></td></tr>
+        <tr><td>로드 후 sanity pass</td><td><code>RepairLoadedGameData()</code> — 복원 실패로 드롭된 모험의 <code>isRented</code>/<code>isAdventuring</code> 해제, 고아 아이템 반환</td></tr>
+      </table>
+      <p class="small">유산(PlayerData) 로드는 <code>LoadDataStatus</code>(Success / Missing / RestoredFromBackup / <b>Corrupted</b>)를 함께 반환 — Corrupted면 빈 데이터로 조용히 확정하지 않고 클라우드 복구·안내를 거칩니다.</p>
+    </div>
+  </div>
+  <p class="link">코드: Scripts/Core/GameManager.cs#L46, #L123, #L260 · Scripts/Systems/SaveManager.cs#L195 · Scripts/Systems/InventoryManager.cs#L32 · Scripts/Utils/SaveDataConverter.cs</p>
+</section>
+
+<!-- ===================== §3 밸런스 시뮬레이터 (1/2) ===================== -->
+<section class="page">
+  <h2><span class="num">§3</span>밸런스 시뮬레이터 — 밸런싱을 실측으로 ★</h2>
+  <div class="psr">
+    <div><b>문제</b>"무기 3,000G가 비싼지 싼지 판단할 근거가 없어, 조정할 때마다 임의 수치를 골랐다." 목표를 '생존 주차' 같은 종속변수에 걸어두니 A를 고치면 B가 깨지는 두더지 잡기가 됐습니다.</div>
+    <div><b>접근</b>게임 로직을 헤드리스로 돌리는 시뮬레이터(5,026줄)를 만들고, 모든 가격을 "모험 1회 순수입 R의 배수"로 읽는 기준 체계를 세웠습니다. 수치는 100% 실제 SO 에셋에서 읽습니다.</div>
+    <div><b>결과</b>페르소나 3층 통과율 96 / 70 / 33%로 레벨디자인 합격선(95↑/70/40↓) 달성. 밸런스 변경 35건 전부 before/after 리포트 첨부. 리포트 255개 생성.</div>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <h3 style="margin-top:0">3-1. 설계 — 미러 로직 + 실제 에셋 + 결정론</h3>
+      <ul>
+        <li><b>수치는 에셋, 공식은 미러.</b> <code>SimBundle.Load()</code>가 Config SO 15종과 던전·무기·의뢰·모험가 데이터를 <code>AssetDatabase</code>로 통째로 읽습니다. 그래서 <code>PriceTierConfig</code> 값을 바꾸면 시뮬 코드는 손댈 필요가 없습니다. 런타임 <code>MonoBehaviour</code> 매니저는 호출하지 않고 계산식만 출처 주석을 달아 재구현했으며, 순수 static 유틸(<code>StatCurve</code>, <code>TypeAdvantage</code>)은 그대로 공유합니다.</li>
+        <li><b>페르소나 3종</b>(상급/중급/초급) — 차이는 <b>정보 사용량</b> 하나뿐. 판정은 SimWorld가 실제 수식으로 하고 페르소나는 선택만 합니다.</li>
+        <li><b>RNG 스트림 분리</b> — 메인/특성/점술/네임드/엔드리스 5개 시드를 따로 둡니다. 새 시스템을 미러링할 때 전용 rng를 쓰므로 <b>그 축을 OFF로 끈 런이 도입 이전 코드와 비트 단위로 동일</b>합니다. 이걸로 "새 시스템이 결과를 바꿨는가"를 무결성 A/B로 검증합니다.</li>
+        <li><b>회차 반복</b> — 폐업 시 유산 획득 → 다음 회차(시드당 최대 5회). 유산 20종 단독 효과 스윕은 <b>같은 시드끼리 짝지은 차이의 중앙값(paired median)</b>을 씁니다 — 독립 비교는 시드 경로 발산만으로 10% 흔들려 효과가 묻히기 때문입니다.</li>
+      </ul>
+<pre><code>// SimCore.cs:700-704 — 축별 독립 RNG 스트림
+rng      = new Random(seed*977 + persona.Name[0] + (runIndex-1)*7919);
+traitRng = new Random(seed*733 + ...);   // 특성 롤
+seerRng  = new Random(seed*509 + ...);   // 점술
+namedRng = new Random(seed*331 + ...);   // 네임드 스폰/재방문
+questRng = new Random(seed*199 + ...);   // 엔드리스 템플릿 추첨</code></pre>
+    </div>
+    <div>
+      <h3 style="margin-top:0">3-2. 실행 파이프라인</h3>
+      <svg viewBox="0 0 380 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#0f3d5e"/></marker></defs>
+        <g font-size="9.5" fill="#1e232b">
+          <rect x="5" y="10" width="85" height="44" rx="4" fill="#e8eef4" stroke="#0f3d5e"/><text x="47" y="28" text-anchor="middle" font-weight="700">RunSim.bat</text><text x="47" y="44" text-anchor="middle" font-size="8.5">시드·주차·플래그</text>
+          <rect x="120" y="10" width="110" height="44" rx="4" fill="#e8eef4" stroke="#0f3d5e"/><text x="175" y="28" text-anchor="middle" font-weight="700">Unity -batchmode</text><text x="175" y="44" text-anchor="middle" font-size="8.5">-executeMethod RunBatch</text>
+          <rect x="260" y="10" width="115" height="44" rx="4" fill="#e8eef4" stroke="#0f3d5e"/><text x="317" y="28" text-anchor="middle" font-weight="700">SimBundle.Load()</text><text x="317" y="44" text-anchor="middle" font-size="8.5">SO 에셋 → 검증(IsValid)</text>
+          <rect x="260" y="90" width="115" height="44" rx="4" fill="#fdf8ef" stroke="#c8831a"/><text x="317" y="108" text-anchor="middle" font-weight="700">RunAll()</text><text x="317" y="124" text-anchor="middle" font-size="8.5">페르소나×시드×회차</text>
+          <rect x="120" y="90" width="110" height="44" rx="4" fill="#fdf8ef" stroke="#c8831a"/><text x="175" y="108" text-anchor="middle" font-weight="700">SimReport.Write()</text><text x="175" y="124" text-anchor="middle" font-size="8.5">md 요약 + csv 43열</text>
+          <rect x="5" y="90" width="85" height="44" rx="4" fill="#f4f6f9" stroke="#8a97a5"/><text x="47" y="108" text-anchor="middle" font-weight="700">Changelog</text><text x="47" y="124" text-anchor="middle" font-size="8.5">근거·전후 기록</text>
+        </g>
+        <line x1="90" y1="32" x2="120" y2="32" stroke="#0f3d5e" stroke-width="1.5" marker-end="url(#a2)"/>
+        <line x1="230" y1="32" x2="260" y2="32" stroke="#0f3d5e" stroke-width="1.5" marker-end="url(#a2)"/>
+        <line x1="317" y1="54" x2="317" y2="90" stroke="#0f3d5e" stroke-width="1.5" marker-end="url(#a2)"/>
+        <line x1="260" y1="112" x2="230" y2="112" stroke="#0f3d5e" stroke-width="1.5" marker-end="url(#a2)"/>
+        <line x1="120" y1="112" x2="90" y2="112" stroke="#0f3d5e" stroke-width="1.5" marker-end="url(#a2)"/>
+      </svg>
+      <table class="small">
+        <tr><th>실행기</th><th>기본값</th><th>산출</th></tr>
+        <tr><td><code>RunSim.bat</code></td><td>100시드 / 100주 / 5회차</td><td>페르소나 비교 · R 비율표 · 회차 곡선</td></tr>
+        <tr><td><code>RunSweep.bat</code></td><td>100 / 70</td><td>유산 20종 단독 효과 (21구성)</td></tr>
+        <tr><td><code>RunEndlessSweep.bat</code></td><td>60 / 100</td><td>엔드리스 템플릿 16종 단독 반복 (17구성)</td></tr>
+      </table>
+      <p class="small">진단 플래그 <code>-simForceMorning</code> / <code>-simForceReroll</code>: "이득일 때만 한다"는 봇 정책은 지출 0을 만드는데, 그 0이 <b>봇 결함인지 콘텐츠가 죽은 것인지</b>는 강제 참여로 한 번 더 돌려야 구분됩니다 — 실제로 4번 겪은 함정을 체크리스트로 남겼습니다.</p>
+
+      <h3>3-3. R 기준 체계 — 가격을 "모험 몇 회분"으로 읽기</h3>
+      <p><b>R = 모험 1회 성공 시 순수입.</b> 이 게임의 모든 골드는 모험에서 나오므로 모든 가격을 R의 배수로 정의하고, 조정 위계를 고정했습니다.</p>
+<pre><code>1차  R 확정         던전 보상 × 수수료 — 다른 모든 것의 기준점
+2차  가격 = R 배수   무기 1.8R~30R / 수색 0.3R / 점술 0.6R / 재부여 ~6R
+3차  압박 = 수입 비율 벌금 (1200 + 1300w)
+4차  페르소나 격차   생존 주차는 조정 대상이 아니라 "검증 대상"</code></pre>
+      <p class="small">부수 효과: R이 실력 지표를 겸합니다 — 상급자 R≈1,100G, 중급≈700G. 상성을 맞춰 팁 수수료를 받기 때문에 <b>정보의 가치가 R에 이미 녹아</b> 있습니다.</p>
+    </div>
+  </div>
+  <p class="link">코드: Scripts/Editor/BalanceSimulator/SimCore.cs#L695 (SimWorld.Run) · #L1666 (LaunchAdventure 미러) · SimReport.cs#L500 (AppendRatioTable) · #L76 (paired median) · BalanceSimulatorWindow.cs#L164 (RunBatch) · Tools/BalanceSim/</p>
+</section>
+
+<!-- ===================== §3 밸런스 시뮬레이터 (2/2) ===================== -->
+<section class="page">
+  <h2><span class="num">§3</span>밸런스 시뮬레이터 — 실측 결과와 결정 사례</h2>
+  <div class="grid2">
+    <div>
+      <h3 style="margin-top:0">3-4. 최종 상태 (sim_summary_20260801_201317 · 100시드 × 40주 × 5회차)</h3>
+      <table>
+        <tr><th>지표</th><th class="num">상급자</th><th class="num">중급자</th><th class="num">초급자</th><th class="num">합격선</th></tr>
+        <tr><td>퀘스트 통과율</td><td class="num"><b>96%</b></td><td class="num"><b>70%</b></td><td class="num"><b>33%</b></td><td class="num">95↑ / 70 / 40↓</td></tr>
+        <tr><td>회차 수명</td><td class="num">40주</td><td class="num">31주</td><td class="num">19주</td><td class="num">—</td></tr>
+        <tr><td>폐업률</td><td class="num">10%</td><td class="num">93%</td><td class="num">100%</td><td class="num">—</td></tr>
+        <tr><td>최고 평판</td><td class="num">Diamond</td><td class="num">Diamond</td><td class="num">Bronze</td><td class="num">—</td></tr>
+        <tr><td>주간 순수입</td><td class="num">26,851G</td><td class="num">22,982G</td><td class="num">5,760G</td><td class="num">—</td></tr>
+        <tr><td>주간 수색 지출</td><td class="num">10,825G</td><td class="num">0G</td><td class="num">0G</td><td class="num">—</td></tr>
+      </table>
+      <h4>R 기준 비율표 (상급자)</h4>
+      <table class="small">
+        <tr><th>구간</th><th class="num">R</th><th class="num">무기</th><th class="num">제작</th><th class="num">재부여</th><th class="num">대장간</th><th class="num">수색</th><th class="num">점술</th><th class="num">벌금/수입</th></tr>
+        <tr><td>1–10주</td><td class="num">757G</td><td class="num">1.8R</td><td class="num">1.1R</td><td class="num">5.9R</td><td class="num">3.3R</td><td class="num">0.3R</td><td class="num">0.4R</td><td class="num">0%</td></tr>
+        <tr><td>11–20주</td><td class="num">951G</td><td class="num">3.7R</td><td class="num">1.1R</td><td class="num">5.9R</td><td class="num">9.0R</td><td class="num">0.3R</td><td class="num">0.3R</td><td class="num">0%</td></tr>
+        <tr><td>21–30주</td><td class="num">1,086G</td><td class="num">4.2R</td><td class="num">1.2R</td><td class="num">6.2R</td><td class="num">13.9R</td><td class="num">0.2R</td><td class="num">0.3R</td><td class="num">1%</td></tr>
+        <tr><td>31–40주</td><td class="num">1,161G</td><td class="num">4.0R</td><td class="num">1.1R</td><td class="num">5.8R</td><td class="num">16.4R</td><td class="num">0.2R</td><td class="num">0.3R</td><td class="num">6%</td></tr>
+      </table>
+      <p class="small">같은 파일의 초급자는 R 600 → 1,376G, 벌금/수입 33% → 117% → 86% — 압박이 "수입 비율"로 설계된 대로 초급에게만 걸립니다.</p>
+
+      <h3>3-5. 결정 사례 ② 무기 제작비 계단 4.5배 → 2.0배 (2026-08-01)</h3>
+      <p><b>근거</b> 상점가는 고정인데 제작 골드에만 주차 계단(1→4.5배)이 붙어 후반에 <b>제작이 구매보다 비싸졌습니다</b>. 레시피 24종 전수 계산: 41주+ 영웅 104~120%, 전설 116~123%. "재료를 모으는 수고를 더 하고 돈도 더 내는 구조."</p>
+      <p><b>수정</b> <code>PriceTierConfig.weaponCraftCost</code> 1/1.5/2.5/3.5/4.5 → 1/1.2/1.5/1.8/2.0 (대장간·재부여와 동일 곡선으로 통일)</p>
+      <table class="small">
+        <tr><th>구간 (상급자)</th><th class="num">구매 전→후</th><th class="num">제작 전→후</th></tr>
+        <tr><td>11–20주</td><td class="num">3.9R → 3.7R</td><td class="num">1.8R → <b>1.1R</b></td></tr>
+        <tr><td>31–40주</td><td class="num">2.9R → 4.0R</td><td class="num">1.6R → <b>1.1R</b></td></tr>
+      </table>
+      <p class="small">우려 2건도 실측으로 해소 — 후반 골드 축적 폭주 없음(40주 보유 골드 1,684,102 → 1,686,848G), 제작이 구매를 잠식하지 않음(구매 지출 동일, 보유 무기 27 → 34자루).</p>
+    </div>
+    <div>
+      <h3 style="margin-top:0">3-5. 결정 사례 ① 엔드리스 난이도 등급 신설 (2026-07-29)</h3>
+      <p><b>발견</b> 엔드리스 템플릿 16종은 아키타입(휴식/표준/소피크/시험)으로 분류돼 있었지만 실측 통과율은 분류와 <b>무관하고 심지어 역전</b> — "'쉬움'으로 구운 W61(36.8%)이 '최고난도' W70(96.7%)보다 2.6배 어려웠다." 난이도를 만드는 건 아키타입이 아니라 <b>병목 3종</b>(저가용 던전 요구 / 희소 무기 석궁 요구 / 둘의 조합)이었습니다.</p>
+      <p><b>수정</b> <code>QuestDifficulty</code> 4단계(Easy/Normal/Hard/Extreme)를 병목 개수 기반으로 신설, 61주+ 벌금을 고정 79,200G에서 <code>79,200 + 8,000 × (주차-61)</code> 곡선으로 전환.</p>
+      <h4>스윕 before → after (상급자, 60시드 × 17구성)</h4>
+      <table class="small">
+        <tr><th>템플릿</th><th class="num">통과율</th><th class="num">폐업률</th><th class="num">주간 순수입</th></tr>
+        <tr><td colspan="4" style="background:#f4f6f9"><b>전</b> (sim_endless_sweep_20260729_224539) — 16종 전부 "Easy", 44~46%로 뭉개짐</td></tr>
+        <tr><td>기준선</td><td class="num">44.2%</td><td class="num">66.1%</td><td class="num">−79,002G</td></tr>
+        <tr><td>W41 [Easy]</td><td class="num">46.2%</td><td class="num">64.7%</td><td class="num">−76,144G</td></tr>
+        <tr><td colspan="4" style="background:#f4f6f9"><b>후</b> (…_230337, 18분 뒤) — 라벨 순서 = 통과율 순서</td></tr>
+        <tr><td>W41 [Easy] 단골들의 주문</td><td class="num">97.6%</td><td class="num">0.0%</td><td class="num">+104,853G</td></tr>
+        <tr><td>W45 [Normal] 끝나지 않는 명성</td><td class="num">94.6%</td><td class="num">0.0%</td><td class="num">+93,683G</td></tr>
+        <tr><td>W49 [Hard] 쏟아지는 주문</td><td class="num">74.6%</td><td class="num">29.4%</td><td class="num">+23,724G</td></tr>
+        <tr><td>W53 [Extreme] 살아있는 전설</td><td class="num">46.7%</td><td class="num">60.5%</td><td class="num">−57,502G</td></tr>
+      </table>
+      <div class="callout">
+        <b>벌금 기울기 A/B가 없었다면 틀린 값을 골랐을 것</b> — 기울기 4,000에서는 상급자 폐업률 31% vs 중급자 21%로 <b>페르소나 순서가 역전</b>됐습니다(재투자로 현금이 얇은 상급자가 먼저 죽음). 8,000에서 70% vs 83%로 정상화. 직관으로는 4,000을 골랐을 겁니다.
+      </div>
+      <h3>3-6. 정직하게 적어야 할 한계</h3>
+      <ul class="small">
+        <li><b>미러 로직의 이중 유지보수</b> — 값은 에셋에서 읽지만 공식이 바뀌면 손으로 맞춰야 합니다. 캠페인 길이를 상수로 뒀다가 조용히 어긋난 적이 있어 <code>EndlessQuestConfig</code>에서 읽도록 고쳤습니다.</li>
+        <li><b>봇 정책이 결과를 지배</b> — "중급이 초급보다 순수입이 낮은 것은 봇이 무기를 2자루씩 사는 정책 탓일 수 있다." 서열은 믿고 절대값은 참고만 합니다.</li>
+        <li><b>미모델링</b> — 기분 배율, 대화, 단골, 네임드 부활. 수치로 못 고치는 구조 문제 4건(황금 아뮬렛, 인벤토리 슬롯, 네임드 등장률, 유산 획득 구조)은 로드맵에 남겼습니다.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="link">문서: Docs/오늘도장비대여/Balance/Reference/밸런스_시뮬레이터_정리.md · Balance/Changelog/2026-07-29_엔드리스_난이도등급과_벌금곡선.md · 2026-08-01_무기제작비_계단_완화.md · Docs/Simulation/</p>
+</section>
+
+<!-- ===================== §4 UGS 라이브옵스 (1/2) ===================== -->
+<section class="page">
+  <h2><span class="num">§4</span>UGS 라이브옵스 — 클라이언트를 믿지 않는 설계 ★</h2>
+  <div class="psr">
+    <div><b>문제</b>1인 개발 모바일 게임에 리더보드·닉네임·기기 이전·밴이 필요했지만 전용 서버를 운영할 여력은 없었습니다. 클라이언트가 쓰는 값은 전부 위조 가능하다는 전제로 시작했습니다.</div>
+    <div><b>접근</b>Cloud Save의 <b>Protected access class</b>(클라 읽기만, Cloud Code만 쓰기)를 신뢰 경계로 삼고, 판정이 필요한 모든 쓰기를 Cloud Code 11개 함수로 옮겼습니다. 서버 함수는 git이 단일 원본이고 CI가 배포합니다.</div>
+    <div><b>결과</b>리더보드 4단계 검증, 서버 스탬프 세이브 동기화, 24h 복구 코드, 밴 3중 검사, 어드민 사이트(pytest 273줄)까지 DB 없이 운영. 정식 출시 후 운영 중.</div>
+  </div>
+  <svg viewBox="0 0 760 170" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#0f3d5e"/></marker>
+    <marker id="a3x" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#b23a3a"/></marker></defs>
+    <g font-size="10" fill="#1e232b">
+      <rect x="5" y="20" width="150" height="120" rx="5" fill="#e8eef4" stroke="#0f3d5e"/>
+      <text x="80" y="40" text-anchor="middle" font-weight="700" fill="#0f3d5e">Unity 클라이언트</text>
+      <text x="80" y="60" text-anchor="middle" font-size="8.8">UGSManager · CloudSyncService</text>
+      <text x="80" y="75" text-anchor="middle" font-size="8.8">LeaderboardManager · BanManager</text>
+      <text x="80" y="90" text-anchor="middle" font-size="8.8">NicknameManager · AnalyticsManager</text>
+      <text x="80" y="118" text-anchor="middle" font-size="8.8" fill="#b23a3a">위조 가능 — 판정 주체가 아님</text>
+
+      <rect x="215" y="5" width="200" height="72" rx="5" fill="#fdf8ef" stroke="#c8831a"/>
+      <text x="315" y="24" text-anchor="middle" font-weight="700" fill="#7a4e0a">Cloud Save · Default</text>
+      <text x="315" y="41" text-anchor="middle" font-size="8.8">playerData · legacyData · restore*</text>
+      <text x="315" y="56" text-anchor="middle" font-size="8.8">*ServerSavedAtMs (서버 시각)</text>
+      <text x="315" y="70" text-anchor="middle" font-size="8.5" fill="#7a4e0a">클라이언트 읽기/쓰기</text>
+
+      <rect x="215" y="88" width="200" height="72" rx="5" fill="#fbeaea" stroke="#b23a3a"/>
+      <text x="315" y="107" text-anchor="middle" font-weight="700" fill="#b23a3a">Cloud Save · Protected</text>
+      <text x="315" y="124" text-anchor="middle" font-size="8.8">sessionToken · sessionTokenUsed</text>
+      <text x="315" y="139" text-anchor="middle" font-size="8.8">playerNickname · banned · banUntil</text>
+      <text x="315" y="153" text-anchor="middle" font-size="8.5" fill="#b23a3a">클라이언트 읽기만 — 쓰기는 Cloud Code만</text>
+
+      <rect x="470" y="20" width="150" height="120" rx="5" fill="#e8eef4" stroke="#0f3d5e"/>
+      <text x="545" y="40" text-anchor="middle" font-weight="700" fill="#0f3d5e">Cloud Code (JS ×11)</text>
+      <text x="545" y="60" text-anchor="middle" font-size="8.8">submitLeaderboardScore</text>
+      <text x="545" y="75" text-anchor="middle" font-size="8.8">changeNickname · checkBanStatus</text>
+      <text x="545" y="90" text-anchor="middle" font-size="8.8">generate/redeemRestoreCode</text>
+      <text x="545" y="105" text-anchor="middle" font-size="8.8">startGameSession · uploadSave …</text>
+      <text x="545" y="128" text-anchor="middle" font-size="8.5" fill="#0f3d5e">git → GitHub Actions → 배포</text>
+
+      <rect x="650" y="20" width="105" height="120" rx="5" fill="#f4f6f9" stroke="#8a97a5"/>
+      <text x="702" y="40" text-anchor="middle" font-weight="700" fill="#2b4a63">어드민 사이트</text>
+      <text x="702" y="60" text-anchor="middle" font-size="8.8">FastAPI</text>
+      <text x="702" y="75" text-anchor="middle" font-size="8.8">Google OAuth</text>
+      <text x="702" y="90" text-anchor="middle" font-size="8.8">Admin REST</text>
+      <text x="702" y="118" text-anchor="middle" font-size="8.5" fill="#2b4a63">밴 · 리더보드 관리</text>
+    </g>
+    <line x1="155" y1="45" x2="215" y2="45" stroke="#0f3d5e" stroke-width="1.5" marker-end="url(#a3)"/>
+    <line x1="155" y1="120" x2="215" y2="120" stroke="#0f3d5e" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#a3)"/>
+    <text x="185" y="112" text-anchor="middle" font-size="8" fill="#4a5561">읽기</text>
+    <path d="M155,80 C190,80 190,80 470,80" stroke="#0f3d5e" stroke-width="1.5" fill="none" marker-end="url(#a3)"/>
+    <text x="440" y="86" font-size="8" fill="#4a5561">호출</text>
+    <line x1="470" y1="124" x2="415" y2="124" stroke="#b23a3a" stroke-width="1.5" marker-end="url(#a3x)"/>
+    <line x1="650" y1="124" x2="415" y2="140" stroke="#8a97a5" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#a3)"/>
+  </svg>
+
+  <div class="grid2">
+    <div>
+      <h3 style="margin-top:0">4-1. 리더보드 점수 제출 — 4단계 서버 검증</h3>
+      <ol>
+        <li><b>타입/범위</b> — 양의 정수, ≤ 9999</li>
+        <li><b>밴 검사</b> — Protected의 <code>banned</code>/<code>banUntil</code> 재확인 (에러 2006)</li>
+        <li><b>세션 토큰 대조 + 재사용 차단</b> — <code>startGameSession</code>이 서버에서 만든 토큰을 Protected에 저장, 제출 시 대조하고 <code>sessionTokenUsed</code>로 Replay 차단. 사용 처리는 읽어둔 <code>writeLock</code>으로 조건부 갱신 → 동시 제출(TOCTOU) 시 한쪽만 성공</li>
+        <li><b>시간 검증</b> — 세션 경과 시간 ≥ <code>claimedDays × 30초</code></li>
+      </ol>
+      <div class="callout">
+        <b>"검증하지 않기로 한" 결정도 코드에 남겼습니다</b> (submitLeaderboardScore.js:125-148). <code>claimedDays</code>와 클라우드 <code>playerData.currentDay</code>를 대조해 거부하던 로직을 <b>로그만 남기도록</b> 바꿨습니다. 둘 다 클라이언트가 쓰는 값이라 치터는 저장본을 먼저 위조하면 통과하는 반면, 정상 유저는 일자 경계에서 업로드가 한 번만 늦어도 거부당해 기록을 영구히 잃습니다. "막지 못하는 치터 vs 잃는 정상 유저"를 저울질한 판단입니다.
+      </div>
+      <h3>4-2. 닉네임 — 서버 검증 풀세트</h3>
+      <p class="small">길이 2~12 · 정규식 <code>^[가-힣a-zA-Z0-9_]+$</code> · 욕설 필터는 <b>NFKC 정규화 + 소문자화</b> 후 매칭(전각/호환문자 우회 차단), 금칙어는 SO에서 스크립트로 JS에 자동 인라인. 변경 횟수는 <code>writeLock</code> 조건부 증가로 동시 요청 회피 차단. 리더보드 표시 직전 서버가 <code>&lt;&gt;</code>를 제거해 TMP rich-text 주입도 막습니다.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:0">4-3. 세이브 동기화 — 시계는 서버 것만 믿는다</h3>
+      <p><code>uploadSave</code>가 저장과 동시에 <b>서버 시각 스탬프</b>를 기록하고, 클라이언트는 자기 마지막 업로드 스탬프만 기억합니다. 기기 시간 조작으로 오래된 저장이 최신으로 오판되는 일이 없습니다.</p>
+<pre><code>// CloudSyncService.ResolveGameDirection 요지
+클라우드 스탬프 &gt; 이 기기의 마지막 업로드 스탬프 → 클라우드 채택
+같다 (= 클라우드가 이 기기가 올린 본)        → 로컬 채택 (오프라인 진행 가능성)
+로컬 legacy 손상(IsLegacyCorrupted)          → 스탬프 무시, 무조건 클라우드</code></pre>
+      <ul class="small">
+        <li><b>legacy는 독립 동기화</b> — 게임오버 직후·새 기기처럼 <code>playerData</code>가 없어도 유산은 내려받아야 하므로.</li>
+        <li><b>게임오버 = 클라우드 비우기</b> — 안 하면 메인메뉴 동기화에서 죽은 회차가 부활. 실패 시 <code>pendingCloudClear</code>로 재시도하며, 이 정리는 <b>항상</b> Download/UploadPending보다 먼저 호출됩니다(3곳 모두 주석으로 고정).</li>
+        <li><b>이중 타임아웃 게이트</b> — UGS 초기화 10초 + 절차 10초. 상한 뒤 늦게 온 응답은 <b>폐기</b>(사용자가 이미 게임에 들어갔을 수 있으므로 로컬을 덮어쓰지 않음). 로그인 실패는 <code>SignInAttemptFinished</code> 신호로 조기 탈출.</li>
+      </ul>
+      <h3>4-4. 기기 이전 · 밴</h3>
+      <ul class="small">
+        <li><b>복구 코드</b> — <code>"playerId-secret"</code>, 24h 만료, 1회용. secret 불일치와 데이터 없음을 <b>같은 에러코드</b>로 응답해 계정 존재 여부 오라클을 차단. 원 기기는 30초 폴링으로 사용 감지 후 전체 wipe.</li>
+        <li><b>밴</b> — source of truth는 Protected 3키. 검사는 앱 실행 · 재연결 · <b>점수 제출</b>(실질 차단점) 3중. SDK가 에러코드 2006을 9009로 뭉개는 경우가 있어 메시지 문자열에서 JSON을 정규식 추출하는 우회까지 넣었습니다.</li>
+        <li><b>어드민 사이트</b> — DB 없는 stateless MVP: 어드민이 죽어도 Unity Dashboard에서 같은 키를 직접 조작 가능. Google OAuth + 이메일 화이트리스트(비면 fail-closed), 502 변환 시 detail 축소로 시크릿 누출 방지. pytest로 밴 서비스·인증 경계 커버.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="link">코드: Tools/CloudCode/submitLeaderboardScore.js#L41 · changeNickname.js#L46 · redeemRestoreCode.js#L69 · Scripts/Systems/CloudSyncService.cs#L76 · Scripts/Systems/LeaderboardManager.cs#L378 · Tools/admin-site/app/services/ban_service.py#L48</p>
+</section>
+
+<!-- ===================== §4 (2/2) Analytics + 한계 ===================== -->
+<section class="page">
+  <h2><span class="num">§4</span>UGS 라이브옵스 — 애널리틱스 파이프라인과 한계</h2>
+  <div class="grid2">
+    <div>
+      <h3 style="margin-top:0">4-5. "조용히 사라지는 데이터"를 CI로 막기</h3>
+      <p>UGS Analytics는 <b>미등록 이벤트/파라미터를 invalid로 조용히 버립니다</b>. 코드와 대시보드 스키마가 어긋나면 지표가 소리 없이 빠집니다. 그래서 <code>events.json</code>(이벤트 28개 · 파라미터 73개)을 단일 원본으로 두고 세 방향으로 대조합니다.</p>
+      <table class="small">
+        <tr><th style="width:120px">도구</th><th>하는 일</th></tr>
+        <tr><td><code>analytics.py check</code><br>(530줄, 표준 라이브러리만)</td><td>C# 소스를 <b>정적 파싱</b>해 <code>Send("event", dict)</code> 호출의 이벤트명·딕셔너리 키를 추출하고 <code>events.json</code>과 대조. 주석 제거·괄호 매칭·제네릭 제거·<b>변수로 넘긴 딕셔너리를 메서드 범위에서 역추적</b>. 어긋나면 exit 1 — GitHub Actions에서 실행</td></tr>
+        <tr><td><code>analytics.py render</code></td><td><code>events.json</code> → 대시보드 등록 문서의 생성 구간 갱신, CI가 diff 확인</td></tr>
+        <tr><td><code>dashboard_sync.py</code><br>(626줄, Playwright)</td><td>Unity가 이벤트 스키마 공개 API를 제공하지 않아(조사 근거를 docstring에 기록) 대시보드를 브라우저로 조작. <code>pull</code>/<code>diff</code>/<code>apply</code>, 삭제는 하지 않음. <b>비공식 경로임을 스스로 명시</b></td></tr>
+      </table>
+      <h4>클라이언트 쪽 설계 포인트</h4>
+      <ul class="small">
+        <li>동의 게이트 — "물어봤는가"와 "철회했는가"를 <b>별개 키</b>로 (하나로는 '동의함'과 '아직 안 물어봄'을 구분 못 함). 계정 초기화에도 유지되는 기기 단위 설정.</li>
+        <li><code>required</code>를 어디에도 두지 않음 — 조건부 파라미터가 많아 하나라도 빠지면 이벤트 전체가 폐기되므로.</li>
+        <li>에디터에서는 전송하지 않고 로그만 — 실지표 오염 방지. 게임오버처럼 앱이 곧 꺼지는 시점만 <code>Flush()</code>.</li>
+        <li>4단계 스키마: 게임 흐름 / 패널 열림·닫힘(<code>duration_sec</code>) / 버튼 / 도메인 결과. 분석 목표 G1~G27과 퍼널 A~L에 대응하는 Snowflake SQL 템플릿 786줄 문서화.</li>
+      </ul>
+      <h3>4-6. 배포 — 서버 함수도 git이 단일 원본</h3>
+      <p class="small"><code>deploy.py</code>(593줄, 표준 라이브러리만): <code>envs</code> / <code>diff</code>(차이 있으면 exit 1) / <code>push --yes</code>. <code>module.params</code> 블록을 파싱해 Admin API 타입으로 변환, 5xx/429 재시도, <b>대시보드에서 직접 편집한 흔적(publish 미완 초안) 탐지</b>. GitHub Actions가 <code>main</code> 푸시 시 <code>diff → push → diff</code>로 배포하고, 대시보드 수동 편집은 다음 배포 때 되돌립니다.</p>
+    </div>
+    <div>
+      <h3 style="margin-top:0">4-7. 정직하게 적어야 할 한계</h3>
+      <table class="small">
+        <tr><th style="width:130px">항목</th><th>내용</th></tr>
+        <tr><td>세션 토큰 난수</td><td>Cloud Code 런타임에 Node <code>crypto</code>가 없어 <code>Math.random()</code> 조합. 방어력은 "서버가 만들어 Protected에 저장하고 대조"에서 나오지만 암호학적으로 안전하진 않음</td></tr>
+        <tr><td>시간 검증 상한</td><td>일당 30초 — 실제 플레이보다 훨씬 느슨. 100일 = 50분만 버티면 통과</td></tr>
+        <tr><td>저장본 위조</td><td>점수–저장본 대조를 의도적으로 포기(4-1). 저장본을 위조하는 치터는 통과. "안티치트 완결"이 아니라 "정상 유저 손실 없는 선"</td></tr>
+        <tr><td>강제 업데이트</td><td>서버는 최소 버전 상수만 내려주고 판정은 클라이언트 — 오프라인 재현성을 택한 대신 강제력 없음</td></tr>
+        <tr><td>욕설 필터</td><td>부분문자열 매칭 — 자모 분리·유사문자(l/1)·특수문자 삽입은 못 막음. 55KB 목록을 소스에 인라인</td></tr>
+        <tr><td>감사 로그</td><td>어드민은 <code>actor_email</code>을 받지만 <code>logger.info</code>뿐. 확장 자리만 확보</td></tr>
+        <tr><td>리더보드 닉네임</td><td>metadata 갱신 제약 때문에 조회마다 최대 100명 Cloud Save 병렬 읽기. 1시간 TTL 캐시로 완화했지만 확장성 낮음</td></tr>
+        <tr><td>코드 중복</td><td>Cloud Code Scripts가 모듈 import를 제한해 밴 판정 로직이 두 파일에 복제됨</td></tr>
+        <tr><td>테스트 범위</td><td>어드민 사이트 273줄이 이 시스템의 유일한 자동 테스트. Cloud Code JS·C# 매니저는 미커버</td></tr>
+      </table>
+    </div>
+  </div>
+  <p class="link">코드: Tools/Analytics/analytics.py#L240 (scan_file) · #L196 (resolve_variable_keys) · Tools/Analytics/events.json · Tools/CloudCode/deploy.py · .github/workflows/ · Scripts/Systems/AnalyticsManager.cs</p>
+</section>
+
+<!-- ===================== §5 데이터 · 다국어 ===================== -->
+<section class="page">
+  <h2><span class="num">§5</span>기획 데이터 파이프라인과 다국어</h2>
+  <div class="grid2">
+    <div>
+      <h3 style="margin-top:0">5-1. SO ↔ CSV 툴 — "무음 파손"을 막는 diff + 검증</h3>
+      <p><b>문제</b> 밸런스 데이터를 스프레드시트로 왕복 편집하는데, SO 필드와 CSV 컬럼이 어긋나도 컴파일러는 잡아주지 않습니다. 엉뚱한 컬럼 값이 엉뚱한 필드에 들어가도 조용히 성공합니다 — "빌드는 통과해도 데이터가 무음으로 깨진다(특히 컬럼 인덱스 밀림)."</p>
+      <p><b>해결</b> 5파일 2,661줄의 에디터 툴. 세 탭 모두 <b>쓰기 전에 diff를 보여주고 사람이 체크박스로 승인</b>합니다.</p>
+      <table class="small">
+        <tr><th style="width:95px">탭</th><th>동작</th></tr>
+        <tr><td>Export</td><td>SO → <code>_preview.csv</code>만 생성, 원본 CSV와 diff. 메인 13 + 서브리스트 12 테이블</td></tr>
+        <tr><td>Applier</td><td>preview → 원본 덮어쓰기를 <b>별도 승인 단계</b>로 분리</td></tr>
+        <tr><td>Import</td><td>CSV → SO 결과를 <b>메모리에서 먼저 계산</b> → diff → 부분 승인 → 의존 순서(Material → … → Dialogue)로 적용, 체크된 삭제 행은 에셋 삭제</td></tr>
+      </table>
+<pre><code>// CSVImportTab.cs:560 — 스키마를 규칙 배열로 선언, 오류 1건이면 그 타입 전체 중단
+if (Validate("WeaponData", 9, new[]{
+      "str","str","str","enum:Grade","enum:WeaponType","int","str","int","str"}) &gt; 0) return;</code></pre>
+      <ul class="small">
+        <li><code>Validate</code>: 컬럼 수 · int/float/bool 파싱 · <code>enum:Grade</code>는 13종 enum 맵에서 <code>Enum.IsDefined</code>. 오류 행·헤더명·실제값을 찍음</li>
+        <li><code>CSVDiffCore.Compute</code>: StaticID 키 합집합 순회 → Added/Removed/Modified, 컬럼별 <code>"basePrice: 100→120"</code> 생성. 개행 정규화로 가짜 diff 억제, 서브리스트 행은 <code>__N</code> dedup</li>
+        <li>엑셀에 열린 CSV 잠금 감지, diff 로그 파일 저장</li>
+        <li>유지 규약: SO 필드를 건드리면 <b>같은 작업에서</b> Export/Import/Validate/TypeNames를 함께 고친다 — CLAUDE.md에 체크리스트로 고정</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="margin-top:0">5-2. 다국어 — 프리팹 1,109참조를 건드리지 않고 4개 언어</h3>
+      <p><b>출발점</b> 문자열 약 2,300개가 전량 하드코딩. 전 UI가 한글 전용 폰트 <code>Maplestory Light SDF</code> 하나를 82파일 1,109곳에서 참조 — 가나·한자 글리프가 없어 ja/zh는 <b>렌더링 자체가 불가능</b>했습니다.</p>
+      <h4>해결 ① 폰트 폴백 체인 (코드 약 10줄)</h4>
+      <p class="small">Asset Table로 폰트를 스왑하면 머티리얼 프리셋까지 흔들려 기각. 대신 배정 폰트는 그대로 두고 ja/zh 폰트를 <b>폴백</b>으로 추가, 로케일 변경 시 <b>폴백 순서만</b> 재배열합니다(<code>ja → [JP, SC]</code>, <code>zh → [SC, JP]</code>). 이유는 <b>Han unification</b> — ja/zh가 공유하는 한자 코드포인트는 폴백 1순위 폰트 자형으로 그려지므로 순서가 곧 자형입니다.</p>
+      <h4>해결 ② 아틀라스 Static/Dynamic — 실측이 최초 계획을 뒤집음</h4>
+      <table class="small">
+        <tr><th>옵션</th><th class="num">글리프</th><th class="num">용량</th><th>판정</th></tr>
+        <tr><td>실사용 문자만 Static</td><td class="num">1,984</td><td class="num">~6.4MB</td><td>닉네임 등 임의 입력이 두부(□)</td></tr>
+        <tr><td>ja+zh 상용 합집합 Static</td><td class="num">~7,500</td><td class="num">~24MB</td><td>4배 무거워지고도 인명 한자(喆·玥) 실패</td></tr>
+        <tr><td><b>ko Static + ja/zh Dynamic</b></td><td class="num">11,326 + 런타임</td><td class="num">TTF 20MB</td><td><b>채택</b> — 열거 가능한 것(한글 11,172자·게임 텍스트)은 굽고, 불가능한 것(플레이어 입력)은 Dynamic</td></tr>
+      </table>
+      <h4>해결 ③ "빠진 게 없다"를 스크립트로 증명</h4>
+      <p class="small">기존 판정(프리팹 한글 수 − LSE 수)이 완료를 증명하지 못했습니다 — 정규식 <code>\u[A-C]…</code>이 한글 D 대역(<code>평</code> 등)을 통째로 놓쳐 4건 누락. 그래서 <code>Audit-UiText.ps1</code>이 프리팹/씬 YAML 그래프를 훑어 TMP마다 <b>어느 스크립트의 어느 필드가 <code>.text</code>를 쓰는지 역추적</b>해 6종 판정(EXCLUDED / ATTACHED / CODE_DRIVEN / REVIEW / UNKNOWN_SCRIPT / MISSING)을 내리고, <code>Verify-Localization.ps1</code>이 9항목(4로케일 키 일치 · 빈 번역 0 · en/ja/zh에 남은 한국어 0 · SO 표시 키 1,002건 전부 해석 …)을 exit code로 검사합니다. <code>dotnet build</code> 7초 컴파일 게이트로 Unity를 열지 않고 일괄 치환을 검증했습니다.</p>
+      <p class="small">규모: String Table 7컬렉션 <b>2,110키</b>(Data 1,002 · UI_Screens 413 · Dialogue 219 · Names 208 · UI_Common 176 · UI_Messages 91 · AppName 1) × 4로케일. 6 Phase 중 5 완료, 법적 문서 로컬라이즈만 남음. ko 데이터 테이블은 만들지 않고 <code>DataLocalizer</code>가 ko/미번역이면 SO 원문을 반환해 이중 관리 제거.</p>
+    </div>
+  </div>
+  <p class="link">코드: Scripts/Editor/CSVImportTab.cs#L1017 (Validate) · CSVDiffCore.cs#L54 (Compute) · CSVImportTab.cs#L461 (ApplyToSO) · Scripts/Systems/LocalizationManager.cs · Scripts/Systems/DataLocalizer.cs · Tools/Localization/ · Docs/오늘도장비대여/Development/다국어_도입전략.md</p>
+</section>
+
+<!-- ===================== §6 툴 + §7 출시 ===================== -->
+<section class="page">
+  <h2><span class="num">§6</span>에디터 툴과 CI</h2>
+  <p class="small">Unity 메뉴 <code>Tools &gt; Today's Weapon Rental</code>. <code>Scripts/Editor/</code> 20파일 12,609줄 — 자체 코드의 17%가 개발 도구입니다.</p>
+  <table class="small">
+    <tr><th style="width:190px">툴</th><th class="num" style="width:50px">줄</th><th>역할</th></tr>
+    <tr><td>Balance Simulator (4파일)</td><td class="num">5,026</td><td>§3. 헤드리스 회차 시뮬 · 스윕 2종 · 리포트</td></tr>
+    <tr><td>CSV Tool (5파일)</td><td class="num">2,661</td><td>§5-1. SO ↔ CSV Export/Import/Apply, diff + 검증 + 승인</td></tr>
+    <tr><td>WeeklyQuestGenerator</td><td class="num">1,002</td><td>레벨디자인 문서(아키타입 지도 · 도입 스케줄 · 조합 규칙)로 주간 의뢰 SO 일괄 생성</td></tr>
+    <tr><td>AdventureLogExporter</td><td class="num">868</td><td>모험 로그 5종 CSV. Play 모드는 매니저, 에디터 모드는 <code>gamedata.json</code> 역직렬화</td></tr>
+    <tr><td>DebugDashboard</td><td class="num">702</td><td>런타임 상태 인스펙터 — GameData/Inventory/Visitors/Adventures 4탭, 검색·필터, 0.5초 갱신</td></tr>
+    <tr><td>Adventurer / VisitorNPC Preview</td><td class="num">976</td><td>외형 데이터 선택 → 스폰 → Idle/걷기/싸우기 모션 확인 (전용 카메라 + RenderTexture)</td></tr>
+    <tr><td>WeaponEffectDataGenerator · PresetConverter · ProfanityImporter · AndroidApkBuild · ScreenshotCapture</td><td class="num">1,309</td><td>부가효과 SO 등급별 생성 · 아트메이커 프리셋 → 모험가 변환 · 금칙어 임포트 · 원클릭 APK · F12 스토어 규격 캡처</td></tr>
+  </table>
+  <div class="grid2">
+    <div class="box"><b>GitHub Actions ①</b> <code>ugs-cloudcode-deploy.yml</code> — <code>Tools/CloudCode/**</code> 변경 시 <code>deploy.py diff → push → diff</code>. PR에서는 diff만. concurrency 그룹으로 동시 배포 직렬화.</div>
+    <div class="box"><b>GitHub Actions ②</b> <code>analytics-schema-check.yml</code> — C# 호출부와 <code>events.json</code> 대조, 대시보드 문서 render 후 diff 확인. 어긋나면 실패.</div>
+  </div>
+
+  <h2 style="margin-top:16px"><span class="num">§7</span>출시와 운영</h2>
+  <div class="grid2">
+    <div>
+      <table class="small">
+        <tr><th style="width:80px">날짜</th><th style="width:105px">버전</th><th>내용</th></tr>
+        <tr><td>2026-03-16</td><td>—</td><td>최초 커밋</td></tr>
+        <tr><td>2026-07-30</td><td>0.0.1 알파</td><td>대장간 강화 재료 → 진화 재료, 성공률 상세 패널, 새 레시피</td></tr>
+        <tr><td>2026-08-03</td><td>0.0.2</td><td>앱 이름 한국어화, <b>영어·일본어·중국어 간체 추가</b>, 대화창 가시성</td></tr>
+        <tr><td>2026-08-04</td><td>0.0.3</td><td>저녁 스킵, 순위 업로드 버그, 본인 닉네임 표시. 같은 날 강제 업데이트·계정 삭제·배포 재시도·CI 자동화</td></tr>
+        <tr><td>2026-08-17</td><td><b>1.0.0 정식</b></td><td>Google Play 정식 출시 (bundle 10, AAB 164.5MB)</td></tr>
+      </table>
+    </div>
+    <div>
+      <h4 style="margin-top:0">플레이테스트 지적 → 시스템으로 대응</h4>
+      <table class="small">
+        <tr><th>지적</th><th>대응</th></tr>
+        <tr><td>"성공률 텍스트가 뭘 의미하는지 모르겠다"</td><td>문구 수정이 아니라 클릭 시 <b>상세 패널</b>(이벤트별 확률 툴팁, 기분 색상 Config) 신설</td></tr>
+        <tr><td>"저녁에 할 일이 없어 맥이 끊긴다"</td><td>기존 <code>SkipMorning()</code> 패턴을 대칭 확장한 <code>SkipEvening()</code> — 저비용 재사용</td></tr>
+        <tr><td>"앱 이름이 영어다"</td><td>한국어화하며 <code>AppName</code> String Table 신설 → 이후 ja/zh 앱명이 얹히는 자리가 됨</td></tr>
+        <tr><td>"대화창 이름/역할 가시성"</td><td>표시 계층 수정</td></tr>
+      </table>
+      <p class="small">유저는 문구가 아니라 <b>이해와 리듬</b>을 지적했고, 대응은 UI 요소가 아니라 시스템 확장이었습니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== §8 한계와 회고 ===================== -->
+<section class="page">
+  <h2><span class="num">§8</span>한계와 회고</h2>
+  <div class="grid2">
+    <div>
+      <h3 style="margin-top:0">솔직하게 — 남아 있는 약점</h3>
+      <table class="small">
+        <tr><th style="width:120px">항목</th><th>사실</th></tr>
+        <tr><td><b>자동 테스트 0개</b></td><td><code>Tests/</code> 폴더는 있으나 비어 있음. 대신 에디터 툴 diff/검증, PowerShell 감사 9항목, <code>dotnet build</code> 게이트, CI 스키마 대조, 어드민 pytest로 안전망을 깔았지만 <b>게임 로직 회귀 테스트는 없음</b></td></tr>
+        <tr><td>테스트 부재가 설계를 막음</td><td>문서에 명시 — "성공률 계산기·이벤트 진행기 분리 같은 deepening은 하지 않는다. 자동 테스트 인프라가 없는 상태에서 큰 구조 변경은 후순위"</td></tr>
+        <tr><td>거대 파일</td><td><code>TutorialManager.cs</code> 2,865줄(partial 미적용, region 21개), <code>AdventureManager.Calculations.cs</code> 1,896줄, <code>SimCore.cs</code> 3,124줄</td></tr>
+        <tr><td>UI 비중</td><td><code>UI/</code> 33,607줄로 전체의 45% — View가 "표시만 한다"는 원칙 대비 두꺼움 (View 74파일, 평균 272줄)</td></tr>
+        <tr><td>시뮬레이터 이중 관리</td><td>수치는 단일 원본이지만 <b>공식은 미러</b>. 런타임 계산식 변경을 시뮬에 강제하는 장치 없음</td></tr>
+        <tr><td>명명/배치 불일치</td><td><code>CameraZoomController</code>가 Manager 계층, <code>TraitConfig.asset</code>이 Config 폴더 밖</td></tr>
+        <tr><td>알면서 안 고친 낭비</td><td>메인메뉴 타이틀 글자 11개를 위해 36.4MB 폰트 아틀라스 (재베이크 시 수십 KB)</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3 style="margin-top:0">이 프로젝트에서 배운 것</h3>
+      <ul>
+        <li><b>측정할 수 없는 것은 조정할 수 없다.</b> 시뮬레이터 이전의 밸런싱은 매번 임의 수치였습니다. 도구를 만든 뒤 "지표가 0이면 밸런스 결론 전에 봇부터 의심하라" 같은 함정 체크리스트까지 쌓였고, 결정의 근거가 남기 시작했습니다.</li>
+        <li><b>클라이언트가 쓰는 값은 판정에 쓰지 않는다.</b> 서버 시각 스탬프, Protected 키, writeLock 조건부 갱신 — 이 세 가지로 대부분의 위조·경합이 정리됐습니다. 반대로 "정상 유저가 잃는 검증"은 빼는 것이 맞다는 것도 배웠습니다.</li>
+        <li><b>실측이 계획을 뒤집으면 계획을 버린다.</b> 다국어 아틀라스는 "릴리즈 전 Static 재베이크"가 최초 계획이었지만, 글리프 수를 실제로 세어 보니 4배 무거워지고도 목적을 못 이루는 안이었습니다.</li>
+        <li><b>안전망은 사고를 맞고 자란다.</b> 감사 스크립트의 REVIEW/UNKNOWN_SCRIPT 판정, 저장 규약 3가지, 배포 초안 탐지 — 전부 실제 사고 뒤에 추가된 것입니다. 그 경위를 문서에 남겨서 같은 사고를 두 번 맞지 않게 했습니다.</li>
+        <li><b>다음에 다시 한다면</b> — 도메인 매니저의 계산 로직을 처음부터 <code>MonoBehaviour</code> 없는 순수 C#으로 분리해 EditMode 테스트와 시뮬레이터가 <b>같은 코드</b>를 쓰게 하겠습니다. 미러 이중 관리와 테스트 부재가 같은 뿌리에서 나왔기 때문입니다.</li>
+      </ul>
+      <h3>저장소 안내</h3>
+      <p class="small">GitHub 저장소는 유료 에셋·리소스를 제외한 <b>자체 작성 코드와 문서만</b> 담은 열람용입니다. 본문의 <code>파일#L줄</code> 표기는 저장소의 같은 경로·같은 줄을 가리킵니다 (원본 파일을 그대로 복사했습니다). 설계 문서 65편과 밸런스 변경 기록 35건, 시뮬레이션 리포트 샘플이 <code>Docs/</code>에 있습니다.</p>
+      <p class="link">https://github.com/seunghee-2002/Todays-Weapon-Rental</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
