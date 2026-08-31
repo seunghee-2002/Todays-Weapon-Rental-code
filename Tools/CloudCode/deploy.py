@@ -5,7 +5,6 @@
 대시보드에서 직접 편집하면 이 도구가 다음 실행 때 되돌린다.
 
 - 인증: Authorization: Basic base64(KEY_ID:SECRET)
-  (Tools/admin-site/app/integrations/unity_client.py 와 같은 방식)
 - 표준 라이브러리만 사용 - CI와 로컬이 같은 스크립트를 돌린다
 
 사용법:

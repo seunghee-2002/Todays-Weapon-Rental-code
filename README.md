@@ -20,14 +20,11 @@
 |---|---|---|
 | [`Scripts/`](Scripts/) | `Assets/_Projects/Scripts/` | 게임 C# 전체 (307 파일 · 약 75,000줄) — `.meta` 제외 |
 | [`Tools/CloudCode/`](Tools/CloudCode/) | 동일 | Unity Cloud Code 서버 함수 11개 (JS) + 배포 스크립트 |
-| [`Tools/admin-site/`](Tools/admin-site/) | 동일 | 운영자용 밴/리더보드 관리 웹 (FastAPI + Google OAuth) + pytest |
 | [`Tools/BalanceSim/`](Tools/BalanceSim/) | 동일 | 밸런스 시뮬레이터 배치 실행기 (Unity batchmode) |
 | [`Tools/Analytics/`](Tools/Analytics/) · [`Tools/Localization/`](Tools/Localization/) | 동일 | 애널리틱스 대시보드 동기화 · 다국어 감사/일괄 적용 스크립트 |
 | [`Docs/오늘도장비대여/`](Docs/오늘도장비대여/) | `Documents/` | 설계·시스템·밸런스 문서 (Obsidian 볼트) — 밸런스 변경 기록 35건 포함 |
 | [`Docs/Simulation/`](Docs/Simulation/) | `Documents/Simulation/` | 시뮬레이터 리포트 샘플 (원본 255개 중 12개) |
 | [`CLAUDE.md`](CLAUDE.md) | 루트 | 프로젝트 아키텍처·코딩 규칙 가이드 (AI 코딩 어시스턴트용으로 작성해 유지한 문서) |
-
-포트폴리오 문서: [`PORTFOLIO.pdf`](PORTFOLIO.pdf)
 
 ## 어디부터 보면 좋은가
 
@@ -45,7 +42,7 @@
 - **엔진** Unity 2022.3 LTS · C# · uGUI · TextMeshPro · Addressables · Spine (외형 애니메이션)
 - **온라인** Unity Gaming Services — Authentication · Cloud Save · Cloud Code · Leaderboards · Analytics
 - **다국어** Unity Localization (String Table · 로케일별 폰트 아틀라스)
-- **툴/운영** Python (FastAPI · httpx · pytest), Google OAuth, Docker, PowerShell
+- **툴/운영** Python, PowerShell
 
 ## 라이선스
 
